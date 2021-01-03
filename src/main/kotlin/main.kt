@@ -1,8 +1,7 @@
 
 import area.Area
 import area.EnemyArea
-import logic.HitCalculators.DumpCalculator
-import logic.HitCalculators.SmartCalculator
+import logic.hitCalculators.SmartCalculator
 import logic.Navy
 import logic.Player
 

@@ -1,4 +1,4 @@
-package logic.HitCalculators
+package logic.hitCalculators
 
 import area.Coords
 import area.EnemyArea

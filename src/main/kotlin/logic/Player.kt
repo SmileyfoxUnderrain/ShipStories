@@ -3,7 +3,7 @@ package logic
 import area.Area
 import area.Coords
 import area.EnemyArea
-import logic.HitCalculators.HitCalculator
+import logic.hitCalculators.HitCalculator
 import ships.Ship
 import ships.Deck
 

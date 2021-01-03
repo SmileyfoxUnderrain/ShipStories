@@ -1,4 +1,4 @@
-package logic.HitCalculators
+package logic.hitCalculators
 
 import area.Coords
 import area.EnemyArea
@@ -16,7 +16,7 @@ open class SmartCalculator : HitCalculator {
         undestroyedShips.addAll(detectUndestroyedShips(enemyArea, navy))
         // Если можно рассчитать потенциальные координаты
         if(enemyArea.hitDecks.any() && undestroyedShips.any{it.size > 1}) {
-            val hhShips = detectHalfHitShips(enemyArea, navy)
+            val hhShips = detectHalfHitShips(enemyArea)
             val shipToHit = hhShips
                 // Этот и последующий фильтры не должны срабатывать, если нет ошибок в других местах.
                 // Если что-то подпадает под этот или следующий фильтр, необходимо уточнять, все ли данные по
@@ -43,16 +43,13 @@ open class SmartCalculator : HitCalculator {
         // с последующим наложением этих копий и вычислением вероятности
         val cells = calculatePotentialCells(enemyArea)
         val retcoords = cells.groupBy { c ->
-            var ret: Double
             if(c.coords.x == 0 || c.coords.y == 0 || c.coords.x == 9 || c.coords.y == 9){
                 // Коэффициент влияния расположения корабля скраю карты:
                 // такое расположение увеличивает шанс выигрыша из-за большего количества
                 // пустых клеток
-                ret = (c.potentialShips.size) * 1.2
-            }
-            else
-                ret = c.potentialShips.size.toDouble()
-            ret
+                (c.potentialShips.size) * 1.2
+            } else
+                c.potentialShips.size.toDouble()
             }
             .maxByOrNull { it.key }?.value?.random()?.coords!!
         return retcoords
@@ -66,7 +63,7 @@ open class SmartCalculator : HitCalculator {
         return undestroyedShips
     }
 
-    private fun detectHalfHitShips(enemyArea: EnemyArea, navy: Navy): List<HalfHitShip>{
+    private fun detectHalfHitShips(enemyArea: EnemyArea): List<HalfHitShip>{
         val halfHitShips = mutableListOf<HalfHitShip>()
         val sortedHitDecks = enemyArea.hitDecks.distinct().sortedBy { it.coords.y }.sortedBy { it.coords.x }
         for(deck in sortedHitDecks) {
@@ -108,7 +105,6 @@ open class SmartCalculator : HitCalculator {
 
     private fun calculatePotentialShipCoords(ship: HalfHitShip, enemyArea: EnemyArea){
         val maxPotentialSize = ship.potentialShips.map{ it.size }.maxOrNull() ?: return
-        val notFreeCells = enemyArea.placedShips.flatMap { it.safetyCoords }.plus(enemyArea.missedHitsCoords)
         val maxdelta = maxPotentialSize - ship.knownDecks.size
         val coords = mutableSetOf<Coords>()
         if(ship.knownDecks.size > 1){
