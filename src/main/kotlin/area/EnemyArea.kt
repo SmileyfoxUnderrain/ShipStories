@@ -5,7 +5,7 @@ import ships.Deck
 
 class EnemyArea(xSize: Int, ySize: Int): Area(xSize, ySize) {
     val hitDecks = mutableListOf<Deck>()
-    private val hitObjectsSafetyCoords = mutableSetOf<Coords>()
+    val hitObjectsSafetyCoords = mutableSetOf<Coords>()
 
     val untouchedCells: List<Coords>
         get() = allMapCoords
@@ -50,8 +50,8 @@ class EnemyArea(xSize: Int, ySize: Int): Area(xSize, ySize) {
                     ,deck.coords.copy(x = deck.coords.x - 1)
                     ,deck.coords.copy(x = deck.coords.x + 1)
                 )}.flatten()
-            hitObjectsSafetyCoords.addAll(vCoords.filter { it.y == -1 })
-            hitObjectsSafetyCoords.addAll(hCoords.filter { it.x == -1 })
+            hitObjectsSafetyCoords.addAll(vCoords.filter { it.y in 0..9 })
+            hitObjectsSafetyCoords.addAll(hCoords.filter { it.x in 0..9 })
         }
         return true
     }

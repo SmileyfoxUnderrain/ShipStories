@@ -4,6 +4,7 @@ import area.EnemyArea
 import logic.hitCalculators.SmartCalculator
 import logic.Navy
 import logic.Player
+import logic.hitCalculators.ProbCalculator
 
 fun main(args: Array<String>) {
     val navy = Navy(Pair(4,1), Pair(3,2), Pair(2,3), Pair(1,4))
@@ -11,7 +12,7 @@ fun main(args: Array<String>) {
     val enemyArea = EnemyArea(10,10)
 
     val player1 = prepareFirstPlayer()
-    val player2 = Player("Player 2", navy, area, enemyArea, SmartCalculator())
+    val player2 = Player("Player 2", navy, area, enemyArea, ProbCalculator())
     player2.autoPlaceShips()
     player2.area.printCellsInPseudographic()
 
